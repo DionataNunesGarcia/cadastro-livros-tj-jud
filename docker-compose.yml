@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Container do PHP-FPM (Aqui processa o código PHP/Symfony)
   app:
@@ -12,7 +10,7 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      DATABASE_URL: "mysql://${MYSQL_USER:-tjjud_user}:${MYSQL_PASSWORD:-tjjud_pass}@db:3306/${MYSQL_DATABASE:-tjjud_db}?serverVersion=8.0&charset=utf8mb4"
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
     networks:
       - tjjud_network
     depends_on:
@@ -40,10 +38,10 @@ services:
     container_name: tjjud_db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-tjjud_db}
-      MYSQL_USER: ${MYSQL_USER:-tjjud_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-tjjud_pass}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306"
     volumes:
