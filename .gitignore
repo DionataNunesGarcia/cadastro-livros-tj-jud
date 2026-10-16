@@ -1,2 +1,35 @@
-# Credenciais locais
-.env
+# Credenciais locais (o template .env-default é versionado)
+/.env
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+
+# Testes
+/.phpunit.cache/
+/.phpunit.result.cache
+
+# Docker
+docker-compose.override.yml
+
+# IDE / Sistema
+/.idea/
+/.vscode/
+.DS_Store
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
