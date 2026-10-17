@@ -70,7 +70,7 @@ DATABASE_URL="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?
 O `.env-default` serve de template (estrutura + valores padrão) e deve ser versionado no Git; o `.env` contém seus valores locais e não deve ser commitado. Se você clonar o projeto, faça:
 
 ```bash
-cp .env-default .env
+cp .env.default .env
 ```
 
 Se o `.env` não existir, o compose usa os valores padrão (`:-`) definidos no `docker-compose.yml`.

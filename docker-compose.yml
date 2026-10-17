@@ -9,8 +9,6 @@ services:
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-    environment:
-      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
     networks:
       - tjjud_network
     depends_on:
@@ -52,7 +50,7 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - tjjud_network 
+      - tjjud_network
 
 networks:
   tjjud_network:
