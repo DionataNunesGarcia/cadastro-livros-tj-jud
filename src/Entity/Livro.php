@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LivroRepository::class)]
 #[ORM\Table(name: 'Livro')]
@@ -17,9 +18,13 @@ class Livro
     #[ORM\Column(name: 'Codl', type: 'integer')]
     private ?int $codl = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 40)]
     #[ORM\Column(name: 'Titulo', type: 'string', length: 40)]
     private ?string $titulo = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^\d{4}$/', message: 'Informe o ano com 4 dígitos.')]
     #[ORM\Column(name: 'Editora', type: 'string', length: 40)]
     private ?string $editora = null;
 

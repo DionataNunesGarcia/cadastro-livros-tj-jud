@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Autor{% endblock %}
+
+{% block body %}
+    <h1>Autor</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>CodAu</th>
+                <td>{{ autor.codAu }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ autor.nome }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_autor_index') }}">back to list</a>
+
+    <a href="{{ path('app_autor_edit', {'codAu': autor.codAu}) }}">edit</a>
+
+    {{ include('autor/_delete_form.html.twig') }}
+{% endblock %}
