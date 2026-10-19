@@ -3,22 +3,23 @@
 namespace App\Form;
 
 use App\Entity\Autor;
-use App\Entity\Livro;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AutorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nome')
-            ->add('livros', EntityType::class, [
-                'class' => Livro::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+            ->add('nome', TextType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'Informe o nome.']),
+                    new Length(['max' => 40, 'maxMessage' => 'Máximo de 40 caracteres.']),
+                ],
             ])
         ;
     }
