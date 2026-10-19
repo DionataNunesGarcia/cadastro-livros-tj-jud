@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">
+            <i class="bi bi-bookmark-heart-fill me-2 text-warning"></i>
+            {{ 'Biblioteca'  }}
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                aria-controls="menuPrincipal" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <div class="navbar-nav gap-2 ms-auto my-4 my-lg-2">
+                <a class="nav-link" href="{{ path('app_livro_index') }}">
+                    <i class="bi bi-book me-2"></i> {{ 'Livros'  }}
+                </a>
+                <a class="nav-link" href="{{ path('app_autor_index') }}">
+                    <i class="bi bi-people me-2"></i> {{ 'Autores'  }}
+                </a>
+                <a class="nav-link" href="{{ path('app_assunto_index') }}">
+                    <i class="bi bi-blockquote-left me-2"></i> {{ 'Assuntos'  }}
+                </a>
+                <a class="nav-link" href="{{ path('app_relatorio_livros_por_autor') }}">
+                    <i class="bi bi-file-earmark-bar-graph me-2"></i> {{ 'Relatório'  }}
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
