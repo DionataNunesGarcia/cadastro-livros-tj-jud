@@ -1,124 +1,119 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
 use App\Entity\Autor;
-use App\Repository\AutorRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Entity\Livro;
 
-final class AutorControllerTest extends WebTestCase
+final class AutorControllerTest extends AbstractCrudTestCase
 {
-    private KernelBrowser $client;
-    private EntityManagerInterface $manager;
-    /** @var EntityRepository<Autor> $autorRepository */
-    private EntityRepository $autorRepository;
-    private string $path = '/autor/';
+    private const string PATH = '/autores';
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->manager = static::getContainer()->get('doctrine')->getManager();
-        $this->autorRepository = $this->manager->getRepository(Autor::class);
-
-        foreach ($this->autorRepository->findAll() as $object) {
-            $this->manager->remove($object);
-        }
-
-        $this->manager->flush();
     }
 
     public function testIndex(): void
     {
-        $this->client->followRedirects();
-        $crawler = $this->client->request('GET', $this->path);
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Autor index');
-
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first()->text());
+        $this->client->request('GET', self::PATH);
+        self::assertResponseIsSuccessful();
     }
 
     public function testNew(): void
     {
-        $this->client->request('GET', sprintf('%snew', $this->path));
+        $crawler = $this->client->request('GET', self::PATH . '/new');
+        self::assertResponseIsSuccessful();
 
-        self::assertResponseStatusCodeSame(200);
+        $this->client->submit(
+            $crawler
+                ->filter('form[name="autor"]')
+                ->form([
+                    'autor[nome]' => 'Autor teste',
+                ])
+        );
 
-        $this->client->submitForm('Save', [
-            'autor[nome]' => 'Testing',
-            'autor[livros]' => 'Testing',
-        ]);
-
-        self::assertResponseRedirects('/autor');
-
-        self::assertSame(1, $this->autorRepository->count([]));
-
-        $this->markTestIncomplete('This test was generated');
+        self::assertResponseRedirects(self::PATH);
+        self::assertNotNull(
+            $this->em()
+                ->getRepository(Autor::class)
+                ->findOneBy(['nome' => 'Autor teste'])
+        );
     }
 
     public function testShow(): void
     {
         $fixture = new Autor();
-        $fixture->setNome('My Title');
-        $fixture->setLivros('My Title');
+        $fixture->setNome('Autor Show');
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->em()->persist($fixture);
+        $this->em()->flush();
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', sprintf('%s%s', self::PATH . '/', $fixture->getCodAu()));
 
         self::assertResponseStatusCodeSame(200);
+        self::assertSelectorTextContains('body', 'Autor Show');
         self::assertPageTitleContains('Autor');
-
-        // Use assertions to check that the properties are properly displayed.
-        $this->markTestIncomplete('This test was generated');
     }
 
     public function testEdit(): void
     {
         $fixture = new Autor();
-        $fixture->setNome('Value');
-        $fixture->setLivros('Value');
+        $fixture->setNome('Fulano Silva');
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->em()->persist($fixture);
+        $this->em()->flush();
 
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
+        $crawler = $this->client->request('GET', self::PATH . '/' . $fixture->getCodAu() . '/edit');
+        $this->client->submit($crawler->filter('form[name="autor"]')->form([
+            'autor[nome]' => 'Beltrano Silva',
+        ]));
 
-        $this->client->submitForm('Update', [
-            'autor[nome]' => 'Something New',
-            'autor[livros]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/autor');
-
-        $fixture = $this->autorRepository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getNome());
-        self::assertSame('Something New', $fixture[0]->getLivros());
-
-        $this->markTestIncomplete('This test was generated');
+        self::assertResponseRedirects(self::PATH);
+        self::assertSame('Beltrano Silva', $this->em()->find(Autor::class, $fixture->getCodAu())?->getNome());
     }
 
     public function testRemove(): void
     {
-        $fixture = new Autor();
-        $fixture->setNome('Value');
-        $fixture->setLivros('Value');
+        $fixture = (new Autor())->setNome('Excluir Autor');
+        $this->em()->persist($fixture);
+        $this->em()->flush();
+        $id = $fixture->getCodAu();
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $crawler = $this->client->request('GET', self::PATH . '/' .$id);
+        $this->client->submit($crawler->filter('form')->form());
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-        $this->client->submitForm('Delete');
+        self::assertResponseRedirects(self::PATH);
+        self::assertNull($this->em()->find(Autor::class, $id));
+    }
 
-        self::assertResponseRedirects('/autor');
-        self::assertSame(0, $this->autorRepository->count([]));
+    public function testNaoPermiteExcluirAutorComLivros(): void
+    {
+        $autor = (new Autor())
+            ->setNome('Autor Vinculado');
 
-        $this->markTestIncomplete('This test was generated');
+        $livro = (new Livro())
+            ->setTitulo('Livro do Autor')
+            ->setEditora('Editora Base')
+            ->setEdicao(1)
+            ->setAnoPublicacao('2024')
+            ->setValor('10.00');
+
+        $livro->addAutor($autor);
+
+        $this->em()->persist($autor);
+        $this->em()->persist($livro);
+
+        $this->em()->flush();
+        $id = $autor->getCodAu();
+
+        $crawler = $this->client->request('GET', self::PATH . '/' . $id);
+        $this->client->submit($crawler->filter('form')->form());
+
+        self::assertResponseRedirects(self::PATH);
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('body', 'Não é possível excluir este autor');
+        self::assertNotNull($this->em()->find(Autor::class, $id));
     }
 }
