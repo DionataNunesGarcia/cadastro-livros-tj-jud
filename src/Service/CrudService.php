@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Contract\EntidadeComVinculos;
 use App\Exception\RegistroDuplicadoException;
 use App\Exception\RegistroEmUsoException;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -27,6 +28,10 @@ class CrudService
 
     public function remover(object $entidade): void
     {
+        if ($entidade instanceof EntidadeComVinculos && !$entidade->getLivros()->isEmpty()) {
+            throw new RegistroEmUsoException('Existem livros vinculados a este registro.');
+        }
+
         try {
             $this->em->remove($entidade);
             $this->em->flush();
