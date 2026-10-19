@@ -23,8 +23,6 @@ class Livro
     #[ORM\Column(name: 'Titulo', type: 'string', length: 40)]
     private ?string $titulo = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Regex(pattern: '/^\d{4}$/', message: 'Informe o ano com 4 dígitos.')]
     #[ORM\Column(name: 'Editora', type: 'string', length: 40)]
     private ?string $editora = null;
 
