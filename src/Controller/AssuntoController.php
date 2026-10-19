@@ -3,15 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Assunto;
+use App\Exception\RegistroDuplicadoException;
+use App\Exception\RegistroEmUsoException;
 use App\Form\AssuntoType;
 use App\Repository\AssuntoRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CrudService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/assunto')]
+#[Route('/assuntos')]
 final class AssuntoController extends AbstractController
 {
     #[Route(name: 'app_assunto_index', methods: ['GET'])]
@@ -23,23 +25,27 @@ final class AssuntoController extends AbstractController
     }
 
     #[Route('/new', name: 'app_assunto_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, CrudService $crud): Response
     {
         $assunto = new Assunto();
         $form = $this->createForm(AssuntoType::class, $assunto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($assunto);
-            $entityManager->flush();
+            try {
+                $crud->salvar($assunto);
+                $this->addFlash('success', 'Assunto foi cadastrado com sucesso!');
 
-            return $this->redirectToRoute('app_assunto_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_assunto_index', [], Response::HTTP_SEE_OTHER);
+            } catch (RegistroDuplicadoException $e) {
+                $this->addFlash('danger', 'Já existe um Assunto com esses dados.');
+            }
         }
 
         return $this->render('assunto/new.html.twig', [
             'assunto' => $assunto,
             'form' => $form,
-        ]);
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 
     #[Route('/{codAs}', name: 'app_assunto_show', methods: ['GET'])]
@@ -51,29 +57,38 @@ final class AssuntoController extends AbstractController
     }
 
     #[Route('/{codAs}/edit', name: 'app_assunto_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Assunto $assunto, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Assunto $assunto, CrudService $crud): Response
     {
         $form = $this->createForm(AssuntoType::class, $assunto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            try {
+                $crud->salvar($assunto);
+                $this->addFlash('success', 'Assunto atualizado com sucesso!');
 
-            return $this->redirectToRoute('app_assunto_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_assunto_index', [], Response::HTTP_SEE_OTHER);
+            } catch (RegistroDuplicadoException $e) {
+                $this->addFlash('danger', 'Já existe um assunto com esses dados.');
+            }
         }
 
         return $this->render('assunto/edit.html.twig', [
             'assunto' => $assunto,
             'form' => $form,
-        ]);
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 
     #[Route('/{codAs}', name: 'app_assunto_delete', methods: ['POST'])]
-    public function delete(Request $request, Assunto $assunto, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Assunto $assunto, CrudService $crud): Response
     {
         if ($this->isCsrfTokenValid('delete'.$assunto->getCodAs(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($assunto);
-            $entityManager->flush();
+            try {
+                $crud->remover($assunto);
+                $this->addFlash('success', 'Assunto foi removido com sucesso!');
+            } catch (RegistroEmUsoException $e) {
+                $this->addFlash('danger', 'Não é possível excluir este assunto: existem livros vinculados.');
+            }
         }
 
         return $this->redirectToRoute('app_assunto_index', [], Response::HTTP_SEE_OTHER);
