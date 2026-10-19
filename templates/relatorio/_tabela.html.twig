@@ -1,0 +1,32 @@
+{% for autor, livros in porAutor %}
+    <h2>{{ autor }}</h2>
+
+    <table border="1" cellpadding="4" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Editora</th>
+            <th>Edição</th>
+            <th>Ano</th>
+            <th>Valor</th>
+            <th>Assuntos</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for livro in livros %}
+            <tr>
+                <td>{{ livro.codigo_livro }}</td>
+                <td>{{ livro.titulo }}</td>
+                <td>{{ livro.editora }}</td>
+                <td>{{ livro.edicao }}</td>
+                <td>{{ livro.ano_publicacao }}</td>
+                <td>R$ {{ livro.valor|number_format(2, ',', '.') }}</td>
+                <td>{{ livro.assuntos }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Nenhum livro cadastrado.</p>
+{% endfor %}

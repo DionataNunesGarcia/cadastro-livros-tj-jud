@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Relatório — Livros por Autor{% endblock %}
+
+{% block body %}
+    <h1>Relatório de Livros por Autor</h1>
+
+    <form method="get" action="{{ path('app_relatorio_livros_por_autor') }}">
+        <label for="autor">Autor</label>
+        <input type="text" id="autor" name="autor" value="{{ filtroAutor }}">
+        <button>Filtrar</button>
+    </form>
+
+    <p>
+        <a href="{{ path('app_relatorio_livros_por_autor_pdf', {autor: filtroAutor}) }}" target="_blank">
+            Gerar PDF
+        </a>
+    </p>
+
+    {% include 'relatorio/_tabela.html.twig' %}
+{% endblock %}
