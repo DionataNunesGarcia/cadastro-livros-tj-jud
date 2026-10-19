@@ -17,8 +17,8 @@ class AssuntoType extends AbstractType
         $builder
             ->add('descricao', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe a descrição.']),
-                    new Length(['max' => 20, 'maxMessage' => 'Máximo de 20 caracteres.']),
+                    new NotBlank(message: 'Informe a descrição.'),
+                    new Length(max: 20, maxMessage: 'Máximo de 20 caracteres.'),
                 ],
             ])
         ;

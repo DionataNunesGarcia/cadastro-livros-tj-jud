@@ -17,8 +17,8 @@ class AutorType extends AbstractType
         $builder
             ->add('nome', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe o nome.']),
-                    new Length(['max' => 40, 'maxMessage' => 'Máximo de 40 caracteres.']),
+                    new NotBlank(message: 'Informe o nome.'),
+                    new Length(max: 40, maxMessage: 'Máximo de 40 caracteres.'),
                 ],
             ])
         ;

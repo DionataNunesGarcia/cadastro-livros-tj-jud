@@ -25,31 +25,31 @@ class LivroType extends AbstractType
         $builder
             ->add('titulo', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe o título.']),
-                    new Length(['max' => 40, 'maxMessage' => 'Máximo de 40 caracteres.']),
+                    new NotBlank(message: 'Informe o título.'),
+                    new Length(max: 40, maxMessage: 'Máximo de 40 caracteres.'),
                 ],
             ])
             ->add('editora', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe a editora.']),
-                    new Length(['max' => 40, 'maxMessage' => 'Máximo de 40 caracteres.']),
+                    new NotBlank(message: 'Informe a editora.'),
+                    new Length(max: 40, maxMessage: 'Máximo de 40 caracteres.'),
                 ],
             ])
             ->add('edicao', IntegerType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe a edição.']),
-                    new Positive(['message' => 'A edição deve ser um número positivo.']),
+                    new NotBlank(message: 'Informe a edição.'),
+                    new Positive(message: 'A edição deve ser um número positivo.'),
                 ],
             ])
             ->add('anoPublicacao', TextType::class, [
                 'label' => 'Ano de Publicação',
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe o ano.']),
-                    new Regex([
-                        'pattern' => '/^\d{4}$/',
-                        'message' => 'O ano deve conter exatamente 4 dígitos.',
-                    ]),
-                    new Range(['min' => 1500, 'max' => 2100, 'notInRangeMessage' => 'Ano inválido.']),
+                    new NotBlank(message: 'Informe o ano.'),
+                    new Regex(
+                        pattern: '/^\d{4}$/',
+                        message: 'O ano deve conter exatamente 4 dígitos.',
+                    ),
+                    new Range(min: 1500, max: 2100, notInRangeMessage: 'Ano inválido.'),
                 ],
             ])
             ->add('valor', MoneyType::class, [
@@ -57,8 +57,8 @@ class LivroType extends AbstractType
                 'html5' => true,
                 'scale' => 2,
                 'constraints' => [
-                    new NotBlank(['message' => 'Informe o valor.']),
-                    new Positive(['message' => 'O valor deve ser positivo.']),
+                    new NotBlank(message: 'Informe o valor.'),
+                    new Positive(message: 'O valor deve ser positivo.'),
                 ],
             ])
             ->add('autores', EntityType::class, [
