@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Contract\EntidadeComVinculos;
 use App\Repository\AssuntoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AssuntoRepository::class)]
 #[ORM\Table(name: 'Assunto')]
-class Assunto
+class Assunto implements EntidadeComVinculos
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
