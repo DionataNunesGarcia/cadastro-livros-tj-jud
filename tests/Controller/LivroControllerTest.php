@@ -5,9 +5,8 @@ namespace App\Tests\Controller;
 use App\Entity\Assunto;
 use App\Entity\Autor;
 use App\Entity\Livro;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Form;
 
 final class LivroControllerTest extends AbstractCrudTestCase
 {
@@ -55,10 +54,11 @@ final class LivroControllerTest extends AbstractCrudTestCase
             'livro[editora]' => 'Editora Teste',
             'livro[edicao]' => '1',
             'livro[anoPublicacao]' => '2024',
-            'livro[valor]' => '59.90',
+            'livro[valor]' => '59,90',
         ]);
-        $form['livro[autores]']->select([(string) $autor->getCodAu()]);
-        $form['livro[assuntos]']->select([(string) $assunto->getCodAs()]);
+
+        $this->marcarCheckbox($crawler, $form, 'livro[autores]', (string) $autor->getCodAu());
+        $this->marcarCheckbox($crawler, $form, 'livro[assuntos]', (string) $assunto->getCodAs());
 
         $this->client->submit($form);
 
@@ -70,6 +70,17 @@ final class LivroControllerTest extends AbstractCrudTestCase
         self::assertCount(1, $livro->getAssuntos());
     }
 
+    private function marcarCheckbox(Crawler $crawler, Form $form, string $campo, string $valor): void
+    {
+        $valores = $crawler->filter(sprintf('input[name="%s[]"]', $campo))
+            ->each(fn ($node) => $node->attr('value'));
+
+        $posicao = array_search($valor, $valores, true);
+        self::assertNotFalse($posicao, sprintf('Valor %s não encontrado em %s', $valor, $campo));
+
+        $form[$campo.'['.$posicao.']']->tick();
+    }
+
     public function testAnoInvalidoRetorna422(): void
     {
         $crawler = $this->client->request('GET', self::PATH.'/new');
@@ -79,7 +90,7 @@ final class LivroControllerTest extends AbstractCrudTestCase
             'livro[editora]' => 'Editora Teste',
             'livro[edicao]' => '1',
             'livro[anoPublicacao]' => '20X4',
-            'livro[valor]' => '59.90',
+            'livro[valor]' => '59,90',
         ]));
 
         self::assertResponseStatusCodeSame(422);
@@ -107,7 +118,7 @@ final class LivroControllerTest extends AbstractCrudTestCase
             'livro[editora]' => 'Editora Base',
             'livro[edicao]' => '1',
             'livro[anoPublicacao]' => '2024',
-            'livro[valor]' => '10.00',
+            'livro[valor]' => '10,00',
         ]));
 
         self::assertResponseRedirects(self::PATH);
