@@ -6,9 +6,10 @@ use App\Entity\Assunto;
 use App\Entity\Autor;
 use App\Entity\Livro;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class LivroFixtures extends Fixture
+class LivroFixtures extends Fixture implements DependentFixtureInterface
 {
     private const array LIVROS = [
         [

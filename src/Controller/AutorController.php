@@ -17,10 +17,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AutorController extends AbstractController
 {
     #[Route(name: 'app_autor_index', methods: ['GET'])]
-    public function index(AutorRepository $autorRepository): Response
+    public function index(Request $request, AutorRepository $autorRepository): Response
     {
+        $q = trim((string) $request->query->get('q', ''));
+
+        $qb = $autorRepository->createQueryBuilder('au')->orderBy('au.nome', 'ASC');
+
+        if ('' !== $q) {
+            $qb->andWhere('au.nome LIKE :q')->setParameter('q', '%' . $q . '%');
+        }
+
         return $this->render('autor/index.html.twig', [
-            'autores' => $autorRepository->findAll(),
+            'autores' => $qb->getQuery()->getResult(),
+            'filtro' => $q,
         ]);
     }
 
