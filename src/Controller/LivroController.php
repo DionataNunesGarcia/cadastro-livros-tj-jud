@@ -17,10 +17,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class LivroController extends AbstractController
 {
     #[Route(name: 'app_livro_index', methods: ['GET'])]
-    public function index(LivroRepository $livroRepository): Response
+    public function index(Request $request, LivroRepository $livroRepository): Response
     {
+        $q = trim((string) $request->query->get('q', ''));
+
+        $qb = $livroRepository->createQueryBuilder('l')->orderBy('l.titulo', 'ASC');
+
+        if ('' !== $q) {
+            $qb->andWhere('l.titulo LIKE :q')->setParameter('q', '%' . $q . '%');
+        }
+
         return $this->render('livro/index.html.twig', [
-            'livros' => $livroRepository->findAll(),
+            'livros' => $qb->getQuery()->getResult(),
+            'filtro' => $q,
         ]);
     }
 
