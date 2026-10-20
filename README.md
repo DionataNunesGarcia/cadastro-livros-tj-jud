@@ -97,6 +97,18 @@ O `.env.default` serve de template (estrutura + valores padrão) e deve ser vers
 
 Dentro da rede Docker o host é `db` na porta `3306`. Do host, use a porta aleatória retornada por `docker compose port db 3306`.
 
+## Dump do banco (opcional)
+
+Há um dump com schema, dados de demonstração e a view do relatório em `database/dump.sql`, gerado a partir das migrations e das fixtures.
+
+Para importar em um banco **vazio**:
+
+```bash
+docker compose exec -T db sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < database/dump.sql
+```
+
+Atenção: o dump recria as tabelas (`DROP TABLE IF EXISTS`), então não rode em um banco com dados que você queira manter. As migrations + fixtures continuam sendo a forma recomendada de montar o ambiente.
+
 ## Ambiente de teste
 
 O banco de teste é o `tjjud_db_test` (o Doctrine adiciona o sufixo `_test` ao nome do banco). Na primeira vez:
@@ -134,6 +146,21 @@ Para ver a view direto no banco:
 ```bash
 docker compose exec app php bin/console dbal:run-sql "SELECT * FROM vw_livros_por_autor"
 ```
+
+## Histórico do desenvolvimento
+
+O projeto foi feito em etapas, cada uma em uma branch com Pull Request para a `main`:
+
+| PR | Branch | Entrega |
+|---|---|---|
+| #1 | `feat/environment` | Ambiente Docker (PHP 8.4, Nginx e MySQL) |
+| #2 | `feat/app` | Configuração inicial da aplicação |
+| #3 | `feat/entities` | Entidades e migrations |
+| #4 | `feat/tests-structure` | Banco de teste isolado (DAMA + PHPUnit) |
+| #5 | `feat/cruds` | CRUDs, validações e tratamento de exceções |
+| #6 | `feat/relatorio` | View, relatório e PDF |
+| #7 | `feat/ui` | Layout Bootstrap, home e relatório com filtro |
+| #8 | `feat/docs` | Revisão geral e documentação |
 
 ## O que eu decidi (e por quê)
 
