@@ -26,7 +26,10 @@ cp .env.default .env
 2. Preencha no `.env`:
 
 - `APP_SECRET` (ex.: `openssl rand -hex 16`)
-- `MYSQL_ROOT_PASSWORD` e `MYSQL_PASSWORD` (banco e usuário já têm valor padrão)
+- `MYSQL_ROOT_PASSWORD=root_password`
+- `MYSQL_PASSWORD=tjjud_pass`
+
+Esses valores de banco são os mesmos usados pelo `scripts/create-test-db.sh` e pelo `.env.test`. Se trocar, ajuste os dois também.
 
 O `DATABASE_URL` é montado com essas variáveis:
 
