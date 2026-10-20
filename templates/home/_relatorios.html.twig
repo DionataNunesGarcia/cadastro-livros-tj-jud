@@ -1,0 +1,22 @@
+<div class="col-lg-5">
+    <h2 class="h6 text-uppercase text-muted mb-3">{{ 'Relatório'  }}</h2>
+    <div class="card border-0 shadow-sm h-90">
+        <div class="card-body p-4 d-flex flex-column">
+            <i class="bi bi-file-earmark-bar-graph fs-3 text-warning"></i>
+            <h3 class="h5 mt-3">{{ 'Livros por autor'  }}</h3>
+            <p class="text-muted small">
+                {{ 'Gerado a partir da view'  }}
+                <code>vw_livros_por_autor</code>,
+                {{ 'agrupado por autor e com os assuntos consolidados.'  }}
+            </p>
+            <div class="mt-auto d-flex gap-2">
+                <a href="{{ path('app_relatorio_livros_por_autor') }}" class="btn btn-dark btn-sm" tar>
+                    {{ 'Abrir relatório'  }}
+                </a>
+                <a href="{{ path('app_relatorio_livros_por_autor_pdf') }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                    {{ 'Baixar PDF'  }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

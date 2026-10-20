@@ -1,4 +1,64 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{{ form_start(form, {'attr': {'class': 'card-body row g-3'}}) }}
+    <div class="col-12 col-md-6 mb-3">
+        {{ form_label(form.titulo, 'Título', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.titulo, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.titulo) }}
+    </div>
+    <div class="col-12 col-md-6 mb-3">
+        {{ form_label(form.editora, 'Editora', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.editora, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.editora) }}
+    </div>
+    <div class="col-12 col-md-4 mb-3">
+        {{ form_label(form.edicao, 'Edição', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.edicao, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.edicao) }}
+    </div>
+    <div class="col-12 col-md-4 mb-3">
+        {{ form_label(form.anoPublicacao, 'Ano Pulicação', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.anoPublicacao, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.anoPublicacao) }}
+    </div>
+    <div class="col-12 col-md-4 mb-3">
+        {{ form_label(form.valor, 'Preço', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.valor, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.valor) }}
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+        {{ form_label(form.autores, null, {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        <div class="d-flex flex-wrap gap-2">
+            {% for child in form.autores %}
+                <input type="checkbox" class="btn-check" id="{{ child.vars.id }}"
+                       name="{{ child.vars.full_name }}" value="{{ child.vars.value }}"
+                       autocomplete="off" {{ child.vars.checked ? 'checked' }}>
+                <label class="btn btn-sm rounded-pill btn-outline-dark" for="{{ child.vars.id }}">
+                    {{ child.vars.label }}
+                </label>
+            {% endfor %}
+        </div>
+        {{ form_errors(form.autores) }}
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+        {{ form_label(form.assuntos, null, {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        <div class="d-flex flex-wrap gap-2">
+            {% for child in form.assuntos %}
+                <input type="checkbox" class="btn-check" id="{{ child.vars.id }}"
+                       name="{{ child.vars.full_name }}" value="{{ child.vars.value }}"
+                       autocomplete="off" {{ child.vars.checked ? 'checked' }}>
+                <label class="btn btn-sm rounded-pill btn-outline-dark" for="{{ child.vars.id }}">
+                    {{ child.vars.label }}
+                </label>
+            {% endfor %}
+        </div>
+        {{ form_errors(form.assuntos) }}
+    </div>
+
+    <div class="col-12 d-flex gap-2 border-top border-secondary mt-4 pt-4">
+        <button class="btn btn-dark"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+        <a href="{{ path('app_livro_index') }}" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+
+    {{ form_widget(form._token) }}
+{{ form_end(form, {'render_rest': false}) }}

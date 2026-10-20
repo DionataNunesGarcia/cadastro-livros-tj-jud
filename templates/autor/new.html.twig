@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Autor{% endblock %}
+{% block title %}{{ 'Novo autor' }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Autor</h1>
-
-    {{ include('autor/_form.html.twig') }}
-
-    <a href="{{ path('app_autor_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning fw-semibold">{{ 'Novo autor' }}</div>
+                {% include 'autor/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

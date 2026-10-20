@@ -1,0 +1,29 @@
+<div class="col-lg-7">
+    <h2 class="h6 text-uppercase text-muted mb-3">{{ 'Gerenciar'  }}</h2>
+    <div class="list-group shadow-sm">
+        {% set links = [
+            {
+                rota: path('app_livro_index'),
+                icone: 'bi-book',
+                titulo: 'Livros',
+                descricao: 'Título, editora, edição, ano, valor e vínculos' ,
+            },
+            {
+                rota: path('app_autor_index'),
+                icone: 'bi-person',
+                titulo: 'Autores',
+                descricao: 'Cadastro e vínculo com livros' ,
+            },
+            {
+                rota: path('app_assunto_index'),
+                icone: 'bi-tags',
+                titulo: 'Assuntos',
+                descricao: 'Categorias usadas na classificação dos livros' ,
+            },
+        ] %}
+
+        {% for link in links %}
+            {% include 'home/_link.html.twig' with {link: link} only %}
+        {% endfor %}
+    </div>
+</div>

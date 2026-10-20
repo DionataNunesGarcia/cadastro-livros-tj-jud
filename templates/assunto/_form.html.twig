@@ -1,4 +1,12 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'card-body row g-3'}}) }}
+    <div class="col-12 mb-3">
+        {{ form_label(form.descricao, 'Descrição', {'label_attr': {'class': 'form-label small fw-semibold'}}) }}
+        {{ form_widget(form.descricao, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.descricao) }}
+    </div>
+
+    <div class="col-12 d-flex gap-2 border-top border-secondary mt-4 pt-4">
+        <button class="btn btn-dark"><i class="bi bi-check-lg me-1"></i>{{ 'Salvar' }}</button>
+        <a href="{{ path('app_assunto_index') }}" class="btn btn-outline-secondary">{{ 'Cancelar' }}</a>
+    </div>
 {{ form_end(form) }}
