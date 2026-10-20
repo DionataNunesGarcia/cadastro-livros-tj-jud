@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
@@ -11,11 +12,6 @@ use Symfony\Component\DomCrawler\Form;
 final class LivroControllerTest extends AbstractCrudTestCase
 {
     private const string PATH = '/livros';
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
 
     private function criarLivro(string $titulo = 'Livro Base'): Livro
     {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
@@ -7,11 +8,6 @@ use App\Entity\Assunto;
 final class AssuntoControllerTest extends AbstractCrudTestCase
 {
     private const string PATH = '/assuntos';
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
 
     public function testIndex(): void
     {
