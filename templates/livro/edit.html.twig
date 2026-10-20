@@ -3,9 +3,12 @@
 {% block title %}{{ 'Editar Livro' }}{% endblock %}
 
 {% block body %}
-    <h1>
-        {{ 'Editar Livro' }}
-    </h1>
-
-    {{ include('livro/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning fw-semibold">{{ 'Editar livro' }}</div>
+                {% include 'livro/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
