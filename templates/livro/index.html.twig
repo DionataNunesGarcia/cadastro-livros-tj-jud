@@ -3,65 +3,71 @@
 {% block title %}{{ 'Livros' }}{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0">Livros</h1>
-        <a href="{{ path('app_livro_new') }}" class="btn btn-dark">
-            <i class="bi bi-plus-lg me-1"></i>{{ 'Novo livro' }}
-        </a>
-    </div>
-
-    <form method="get" action="{{ path('app_livro_index') }}" class="input-group mb-3 shadow-sm">
-        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-        <input class="form-control" name="q" placeholder="Buscar por título..." value="{{ filtro }}">
-    </form>
-
-    <div class="vstack gap-3 mb-4">
-        {% for livro in livros %}
-            <div class="card border-0 shadow-sm">
-                <div class="card-body d-flex justify-content-between gap-3">
-                    <div>
-                        <h5 class="mb-1">
-                            <a href="{{ path('app_livro_show', {'codl': livro.codl}) }}" class="text-decoration-none text-reset">
-                                {{ livro.titulo }}
-                            </a>
-                        </h5>
-                        <div class="small text-muted">
-                            {{ livro.editora }} · {{ livro.edicao }}ª ed. · {{ livro.anoPublicacao }}
+    <div class="py-4 mt-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <span class="fw-semibold">
+                    <i class="bi bi-file-earmark-bar-graph me-2"></i>{{ 'Lista de livros' }}
+                </span>
+                <a href="{{ path('app_livro_new') }}" class="btn btn-sm btn-light">
+                    <i class="bi bi-plus-lg me-1"></i>{{ 'Novo livro' }}
+                </a>
+            </div>
+            <div class="card-body row g-2 align-items-end mb-4">
+                <form method="get" action="{{ path('app_livro_index') }}" class="col-sm-6 col-md-4 mb-3 col-auto d-flex gap-2">
+                    <input class="form-control" name="q" placeholder="Buscar por título..." value="{{ filtro }}">
+                    <button class="btn btn-success d-flex">
+                        <i class="bi bi-funnel me-1"></i>{{ 'Filtrar' }}
+                    </button>
+                </form>
+                <div class="vstack gap-3 mb-4">
+                    {% for livro in livros %}
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body d-flex justify-content-between gap-3">
+                                <div>
+                                    <h5 class="mb-1">
+                                        <a href="{{ path('app_livro_show', {'codl': livro.codl}) }}" class="text-decoration-none text-reset">
+                                            {{ livro.titulo }}
+                                        </a>
+                                    </h5>
+                                    <div class="small text-muted">
+                                        {{ livro.editora }} · {{ livro.edicao }}ª ed. · {{ livro.anoPublicacao }}
+                                    </div>
+                                    <div class="small mt-1">
+                                        <i class="bi bi-person me-1"></i>
+                                        {{ livro.autores|map(a => a.nome)|join(', ') }}
+                                    </div>
+                                    <div class="mt-2">
+                                        {% for assunto in livro.assuntos %}
+                                            <span class="badge text-bg-success me-1">{{ assunto.descricao }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fs-5 fw-bold text-success text-nowrap">
+                                        R$&nbsp;{{ livro.valor|number_format(2, ',', '.') }}
+                                    </div>
+                                    <div class="mt-2 text-nowrap">
+                                        <a href="{{ path('app_livro_show', {'codl': livro.codl}) }}"
+                                           class="btn btn-sm btn-outline-primary me-1" title="{{ 'Mostrar' }}">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ path('app_livro_edit', {'codl': livro.codl}) }}"
+                                           class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        {% include 'livro/_delete_form.html.twig' %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="small mt-1">
-                            <i class="bi bi-person me-1"></i>
-                            {{ livro.autores|map(a => a.nome)|join(', ') }}
+                    {% else %}
+                        <div class="alert alert-light border text-center">
+                            {{ 'Nenhum livro encontrado.' }}
                         </div>
-                        <div class="mt-2">
-                            {% for assunto in livro.assuntos %}
-                                <span class="badge text-bg-success me-1">{{ assunto.descricao }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <div class="fs-5 fw-bold text-success text-nowrap">
-                            R$&nbsp;{{ livro.valor|number_format(2, ',', '.') }}
-                        </div>
-                        <div class="mt-2 text-nowrap">
-                            <a href="{{ path('app_livro_edit', {'codl': livro.codl}) }}"
-                               class="btn btn-sm btn-outline-primary me-1" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <form method="post" action="{{ path('app_livro_delete', {'codl': livro.codl}) }}"
-                                  class="d-inline" onsubmit="return confirm('Remover este livro?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ livro.codl) }}">
-                                <button class="btn btn-sm btn-outline-danger" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% else %}
-            <div class="alert alert-light border text-center">
-                {{ 'Nenhum livro encontrado.' }}
-            </div>
-        {% endfor %}
+        </div>
     </div>
 {% endblock %}

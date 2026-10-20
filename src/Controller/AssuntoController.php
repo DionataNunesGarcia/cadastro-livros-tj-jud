@@ -17,10 +17,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AssuntoController extends AbstractController
 {
     #[Route(name: 'app_assunto_index', methods: ['GET'])]
-    public function index(AssuntoRepository $assuntoRepository): Response
+    public function index(Request $request, AssuntoRepository $assuntoRepository): Response
     {
+        $q = trim((string) $request->query->get('q', ''));
+
+        $qb = $assuntoRepository->createQueryBuilder('assunto')->orderBy('assunto.descricao', 'ASC');
+
+        if ('' !== $q) {
+            $qb->andWhere('assunto.descricao LIKE :q')->setParameter('q', '%' . $q . '%');
+        }
+
         return $this->render('assunto/index.html.twig', [
-            'assuntos' => $assuntoRepository->findAll(),
+            'assuntos' => $qb->getQuery()->getResult(),
+            'filtro' => $q,
         ]);
     }
 

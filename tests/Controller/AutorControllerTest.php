@@ -10,11 +10,6 @@ final class AutorControllerTest extends AbstractCrudTestCase
 {
     private const string PATH = '/autores';
 
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
-
     public function testIndex(): void
     {
         $this->client->request('GET', self::PATH);

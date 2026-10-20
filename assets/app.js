@@ -7,8 +7,6 @@ import './stimulus_bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
 document.querySelectorAll('[data-mask="money"]').forEach((input) => {
     const format = () => {
         let digits = input.value.replace(/\D/g, '');
