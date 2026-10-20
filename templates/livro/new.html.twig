@@ -3,10 +3,10 @@
 {% block title %}{{ 'Novo Livro' }}{% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
+    <div class="py-4 mt-10 row justify-content-center">
+        <div class="col-12">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-warning fw-semibold">{{ 'Novo livro' }}</div>
+                <div class="card-header bg-success fw-semibold text-white">{{ 'Novo livro' }}</div>
                 {% include 'livro/_form.html.twig' %}
             </div>
         </div>

@@ -1,26 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Assunto{% endblock %}
+{% block title %}{{ 'Assunto' }}{% endblock %}
 
 {% block body %}
-    <h1>Assunto</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>CodAs</th>
-                <td>{{ assunto.codAs }}</td>
-            </tr>
-            <tr>
-                <th>Descricao</th>
-                <td>{{ assunto.descricao }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_assunto_index') }}">back to list</a>
-
-    <a href="{{ path('app_assunto_edit', {'codAs': assunto.codAs}) }}">edit</a>
-
-    {{ include('assunto/_delete_form.html.twig') }}
+    <div class="py-4 mt-10 row justify-content-center">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success fw-semibold text-white">{{ 'Assunto' }}</div>
+                <div class="card-body">
+                    <div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Código' }}:</strong>
+                            <span>{{ assunto.codAs }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Descrição' }}:</strong>
+                            <span>{{ assunto.descricao }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('app_assunto_index') }}" class="btn btn-sm btn-outline-secondary">{{ 'Voltar' }}</a>
+                    {% include 'assunto/_delete_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

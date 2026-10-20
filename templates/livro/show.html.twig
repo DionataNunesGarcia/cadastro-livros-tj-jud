@@ -1,42 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livro{% endblock %}
+{% block title %}{{ 'Livro' }}{% endblock %}
 
 {% block body %}
-    <h1>Livro</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Codl</th>
-                <td>{{ livro.codl }}</td>
-            </tr>
-            <tr>
-                <th>Titulo</th>
-                <td>{{ livro.titulo }}</td>
-            </tr>
-            <tr>
-                <th>Editora</th>
-                <td>{{ livro.editora }}</td>
-            </tr>
-            <tr>
-                <th>Edicao</th>
-                <td>{{ livro.edicao }}</td>
-            </tr>
-            <tr>
-                <th>AnoPublicacao</th>
-                <td>{{ livro.anoPublicacao }}</td>
-            </tr>
-            <tr>
-                <th>Valor</th>
-                <td>{{ livro.valor }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_livro_index') }}">back to list</a>
-
-    <a href="{{ path('app_livro_edit', {'codl': livro.codl}) }}">edit</a>
-
-    {{ include('livro/_delete_form.html.twig') }}
+    <div class="py-4 mt-10 row justify-content-center">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success fw-semibold text-white">{{ 'Livro' }}</div>
+                <div class="card-body">
+                    <div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Código' }}:</strong>
+                            <span>{{ livro.codl }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Título' }}:</strong>
+                            <span>{{ livro.titulo }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Editora' }}:</strong>
+                            <span>{{ livro.editora }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Edição' }}:</strong>
+                            <span>{{ livro.edicao }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Ano de Publicação' }}:</strong>
+                            <span>{{ livro.anoPublicacao }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Valor' }}:</strong>
+                            <span>R$&nbsp;{{ livro.valor|number_format(2, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Autores' }}:</strong>
+                            <span>
+                                {% for autor in livro.autores %}
+                                    <span class="borded rounded-pill btn-outline-dark">
+                                        {{ autor.nome }};
+                                    </span>
+                                {% endfor %}
+                            </span>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <strong>{{ 'Assuntos' }}:</strong>
+                            <span>
+                                {% for assunto in livro.assuntos %}
+                                    <span class="borded rounded-pill btn-outline-dark">
+                                        {{ assunto.descricao }};
+                                    </span>
+                                {% endfor %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('app_livro_index') }}" class="btn btn-sm btn-outline-secondary">{{ 'Voltar' }}</a>
+                    {% include 'livro/_delete_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
