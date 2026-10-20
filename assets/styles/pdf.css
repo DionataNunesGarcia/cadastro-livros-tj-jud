@@ -1,0 +1,69 @@
+body {
+    font-family: "DejaVu Sans", sans-serif;
+    font-size: 11px;
+    color: #1f2933;
+    margin: 24px 28px;
+}
+h1 {
+    font-size: 20px;
+    color: #146c43;
+    margin: 0 0 2px;
+}
+.subtitulo {
+    font-size: 9px;
+    color: #6b7280;
+    margin: 0 0 18px;
+}
+.autor-bloco {
+    margin-bottom: 18px;
+}
+.autor-titulo {
+    font-size: 13px;
+    color: #146c43;
+    border-bottom: 2px solid #146c43;
+    padding-bottom: 3px;
+    margin: 0 0 6px;
+}
+.autor-contagem {
+    font-size: 9px;
+    color: #6b7280;
+    font-weight: normal;
+}
+table.tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+table.tabela thead {
+    display: table-header-group;
+}
+table.tabela th {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    text-align: left;
+    padding: 5px 6px;
+    border-bottom: 1px solid #a3cfbb;
+}
+table.tabela td {
+    padding: 5px 6px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+}
+table.tabela tbody tr.par td {
+    background-color: #f5f7f9;
+}
+table.tabela tr {
+    page-break-inside: avoid;
+}
+table.tabela tfoot td {
+    background-color: #f1f5f9;
+    font-weight: bold;
+    border-top: 1px solid #cbd5e1;
+}
+.valor {
+    text-align: right;
+    white-space: nowrap;
+    color: #146c43;
+}

@@ -1,32 +1,44 @@
 {% for autor, livros in porAutor %}
-    <h2>{{ autor }}</h2>
+    {% set total = livros|reduce((carry, livro) => carry + livro.valor, 0) %}
 
-    <table border="1" cellpadding="4" cellspacing="0" width="100%">
-        <thead>
-        <tr>
-            <th>Código</th>
-            <th>Título</th>
-            <th>Editora</th>
-            <th>Edição</th>
-            <th>Ano</th>
-            <th>Valor</th>
-            <th>Assuntos</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for livro in livros %}
+    <div class="autor-bloco">
+        <h2 class="autor-titulo">
+            {{ autor }} <span class="autor-contagem">({{ livros|length }})</span>
+        </h2>
+
+        <table class="tabela">
+            <thead>
             <tr>
-                <td>{{ livro.codigo_livro }}</td>
-                <td>{{ livro.titulo }}</td>
-                <td>{{ livro.editora }}</td>
-                <td>{{ livro.edicao }}</td>
-                <td>{{ livro.ano_publicacao }}</td>
-                <td>R$ {{ livro.valor|number_format(2, ',', '.') }}</td>
-                <td>{{ livro.assuntos }}</td>
+                <th>{{ 'Título' }}</th>
+                <th>{{ 'Editora' }}</th>
+                <th>{{ 'Ed.' }}</th>
+                <th>{{ 'Ano' }}</th>
+                <th>{{ 'Assuntos' }}</th>
+                <th class="valor">{{ 'Valor' }}</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for livro in livros %}
+                <tr class="{{ loop.index is even ? 'par' : 'impar' }}">
+                    <td>{{ livro.titulo }}</td>
+                    <td>{{ livro.editora }}</td>
+                    <td>{{ livro.edicao }}ª</td>
+                    <td>{{ livro.ano_publicacao }}</td>
+                    <td>{{ livro.assuntos ?: '—' }}</td>
+                    <td class="valor">{{ 'R$' }} {{ livro.valor|number_format(2, ',', '.') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">
+                    {{ livros|length }} {{ livros|length == 1 ? 'livro' : 'livros' }}
+                </td>
+                <td class="valor">{{ 'R$' }} {{ total|number_format(2, ',', '.') }}</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 {% else %}
-    <p>Nenhum livro cadastrado.</p>
+    <p>{{ 'Nenhum livro cadastrado.' }}</p>
 {% endfor %}

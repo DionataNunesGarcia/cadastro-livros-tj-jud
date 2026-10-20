@@ -27,10 +27,14 @@ class RelatorioController extends AbstractController
 
         $html = $this->renderView('relatorio/pdf/livros_por_autor.html.twig', [
             'porAutor' => $relatorio->livrosAgrupadosPorAutor($autor),
+            'css' => file_get_contents(
+                $this->getParameter('kernel.project_dir').'/assets/styles/pdf.css'
+            ),
         ]);
 
         return new Response($relatorio->gerarPdf($html), 200, [
             'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="livros-por-autor.pdf"',
         ]);
     }
 }
