@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Assunto{% endblock %}
+{% block title %}{{ 'Novo assunto' }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Assunto</h1>
-
-    {{ include('assunto/_form.html.twig') }}
-
-    <a href="{{ path('app_assunto_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning fw-semibold">{{ 'Novo assunto' }}</div>
+                {% include 'assunto/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

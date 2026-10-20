@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Assunto{% endblock %}
+{% block title %}{{ 'Editar assunto' }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Assunto</h1>
-
-    {{ include('assunto/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_assunto_index') }}">back to list</a>
-
-    {{ include('assunto/_delete_form.html.twig') }}
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning fw-semibold">{{ 'Editar assunto' }}</div>
+                {% include 'assunto/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

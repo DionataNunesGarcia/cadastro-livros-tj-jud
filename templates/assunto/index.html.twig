@@ -1,35 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Assunto index{% endblock %}
+{% block title %}{{ 'Assuntos' }}{% endblock %}
 
 {% block body %}
-    <h1>Assunto index</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">{{ 'Assuntos' }}</h1>
+        <a href="{{ path('app_assunto_new') }}" class="btn btn-dark">
+            <i class="bi bi-plus-lg me-1"></i>{{ 'Novo assunto' }}
+        </a>
+    </div>
 
-    <table class="table">
-        <thead>
+    <div class="card border-0 shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
             <tr>
-                <th>CodAs</th>
-                <th>Descricao</th>
-                <th>actions</th>
+                <th>{{ 'Cód.' }}</th>
+                <th>{{ 'Descrição' }}</th>
+                <th class="text-end">{{ 'Ações' }}</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for assunto in assuntos %}
-            <tr>
-                <td>{{ assunto.codAs }}</td>
-                <td>{{ assunto.descricao }}</td>
-                <td>
-                    <a href="{{ path('app_assunto_show', {'codAs': assunto.codAs}) }}">show</a>
-                    <a href="{{ path('app_assunto_edit', {'codAs': assunto.codAs}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_assunto_new') }}">Create new</a>
+            </thead>
+            <tbody>
+            {% for assunto in assuntos %}
+                <tr>
+                    <td class="text-muted">{{ assunto.codAs }}</td>
+                    <td>
+                        <a href="{{ path('app_assunto_show', {'codAs': assunto.codAs}) }}" class="text-decoration-none">
+                            {{ assunto.descricao }}
+                        </a>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ path('app_assunto_edit', {'codAs': assunto.codAs}) }}"
+                           class="btn btn-sm btn-outline-primary me-1" title="{{ 'Editar' }}">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <form method="post" action="{{ path('app_assunto_delete', {'codAs': assunto.codAs}) }}"
+                              class="d-inline" onsubmit="return confirm('{{ 'Remover este assunto?' }}');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ assunto.codAs) }}">
+                            <button class="btn btn-sm btn-outline-danger" title="{{ 'Excluir' }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">{{ 'Nenhum assunto cadastrado.' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
